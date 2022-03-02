@@ -3,7 +3,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/QMSS-G5063-2022/Group_AB_Covid_Vaccination">
-    <img src="public/images/COVID-19.png" alt="Logo" width="80" height="80">
+    <img src="images/COVID-19.png" alt="Logo" width="120" height="120">
   </a>
 
   <h3 align="center">Covid-19 Global Vaccine Tracker</h3>
