@@ -3,7 +3,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/QMSS-G5063-2022/Group_AB_Covid_Vaccination">
-    <img src="images/COVID-19.png" alt="Logo" width="150" height="150">
+    <img src="images/COVID-19.png" alt="Logo" width="200" height="200">
   </a>
 
   <h3 align="center">Covid-19 Global Vaccine Tracker</h3>
@@ -34,7 +34,14 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-A **global vaccine tracker** analysis how quickly countries are vaccinating their populations, using data collected from over 130 countries by the Our World in Data project at the University of Oxford.
+A **global vaccine tracker** analysis how countries are rolling out vaccination programs. Making use of the dataset from Our World in Data project at the University of Oxford together with NLP analysis of twitter data, we expect to explore the following question:
+
+- Worldwide-level: How does vaccination rate differ from country to country? We would like to explore more detailed questions such as percentage of each country’s population who received at least one dose and who have been fully vaccinated.
+- Worldwide-level: How fast are countries vaccinating? Which country administered most doses in the past 7 days? Which country administered most doses throughout the Covid-19 timeline?
+- Worldwide-level: How does vaccination doses relate to country variations in health care infrastructure, say, it is expected that countries with higher GDP per capita will have more people getting vaccinated (in per 100K people). We would also look at indicators like region and mortality rate. 
+- Country-level: How does Covid-19 affect each country? We can also ask more detailed questions such as infection rate, death rate, vaccines offered and vaccination phase.
+- Country-level: Does the public’s attitudes and experiences with Covid-19 vaccinations causes low uptake in some countries? For example, it is expected that spread of safety concerns of vaccine amongst Twitter users (e.g., #covidsideeffect) would increase public vaccine hesitancy. We determined three possible barriers: confidence (i.e., safety of the vaccine), complacency (i.e., the perceived need for the vaccine), and convenience (i.e., how accessible the vaccine is to people).  What would be specific barrier to vaccination in each country? 
+
 
 <!-- CONTRIBUTOR -->
 ## Contributor
@@ -51,5 +58,5 @@ A **global vaccine tracker** analysis how quickly countries are vaccinating thei
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
   
-* [Global Vaccinations Dataset](https://ourworldindata.org/covid-vaccinations)
+* [Our World in Data - Global Vaccinations Dataset](https://ourworldindata.org/covid-vaccinations)
 
