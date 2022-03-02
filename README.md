@@ -3,7 +3,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/QMSS-G5063-2022/Group_AB_Covid_Vaccination">
-    <img src="images/COVID-19.png" alt="Logo" width="120" height="120">
+    <img src="images/COVID-19.png" alt="Logo" width="150" height="150">
   </a>
 
   <h3 align="center">Covid-19 Global Vaccine Tracker</h3>
@@ -43,8 +43,8 @@ A **global vaccine tracker** analysis how quickly countries are vaccinating thei
   <tr>
     <td align="center"><a href="https://github.com/ashizhou"><img src="https://avatars.githubusercontent.com/u/70239764?v=3&s=100" width="100px;" alt=""/><br /><sub><b>Yixiao Zhou</b></sub></a><br /><a href="yz4122@columbia.edu" title="Email-Address">yz4122@columbia.edu</a></td>
       <td align="center"><a href="https://github.com/gabrici39"><img src="https://avatars.githubusercontent.com/u/95658686?v=3&s=100" width="100px;" alt=""/><br /><sub><b>Ruoyi Gao</b></sub></a><br /><a href="rg3324@columbia.edu" title="Email-Address">rg3324@columbia.edu</a></td>
-     <td align="center"><a href="https://github.com/ZIYUEXIA"><img src="https://avatars.githubusercontent.com/u/98167885?v=3&s=100" width="100px;" alt=""/><br /><sub><b>Ziyu Xia</b></sub></a><br /><a href="yz4122@columbia.edu" title="Email-Address">yz4122@columbia.edu</a></td>
-     <td align="center"><a href="https://github.com/ZIYUEXIA"><img src="https://avatars.githubusercontent.com/u/98167885?v=3&s=100" width="100px;" alt=""/><br /><sub><b>Yi Sun</b></sub></a><br /><a href="yz4122@columbia.edu" title="Email-Address">yz4122@columbia.edu</a></td>
+     <td align="center"><a href="https://github.com/ZIYUEXIA"><img src="https://avatars.githubusercontent.com/u/98167885?v=3&s=100" width="100px;" alt=""/><br /><sub><b>Ziyu Xia</b></sub></a><br /><a href="zx2271@columbia.edu" title="Email-Address">zx2271@columbia.edu</a></td>
+     <td align="center"><a href="https://github.com/sssooyyi"><img src="https://avatars.githubusercontent.com/u/95590300?v=3&s=100" width="100px;" alt=""/><br /><sub><b>Yi Sun</b></sub></a><br /><a href="ys3512@columbia.edu" title="Email-Address">ys3512@columbia.edu</a></td>
 </tr>
 </table>
 
