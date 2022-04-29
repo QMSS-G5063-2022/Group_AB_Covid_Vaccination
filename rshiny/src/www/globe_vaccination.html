@@ -70,8 +70,8 @@ return `
 </div>
 <p style="margin:0;padding-top:5px;padding-top:0px;font-size:1.3rem;font-weight:600;">${d.NAME}</p>
 <div>
-   <p style="margin:0;padding:1.2px;"><span style="font-size:1.3rem;font-weight:600;">${d.first === -1  ? 'No Data available' : d3.format('.2%')(d.first) }</span><span style="font-weight:300;"> received at least one dose</span></p>
-   <p style="margin:0;padding:1.2px;"><span style="font-weight:600;">${d.fully === -1  ? 'No Data available' : d3.format('.2%')(d.fully) }</span><span style="font-weight:300;"> have been fully vaccinated</span></p>
+   <p style="margin:0;padding:1.2px;"><span style="font-size:1.3rem;font-weight:600;">${d.first === -1  ? 'NA%' : d3.format('.2%')(d.first) }</span><span style="font-weight:300;"> received at least one dose</span></p>
+   <p style="margin:0;padding:1.2px;"><span style="font-weight:600;">${d.fully === -1  ? 'NA%' : d3.format('.2%')(d.fully) }</span><span style="font-weight:300;"> have been fully vaccinated</span></p>
 </div>
 </div>
 `
