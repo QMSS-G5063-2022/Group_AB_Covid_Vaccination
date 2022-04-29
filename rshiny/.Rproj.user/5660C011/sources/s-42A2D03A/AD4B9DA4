@@ -1,0 +1,26 @@
+{
+    "id": "AD4B9DA4",
+    "path": "~/Documents/QMSS5063/final_project/rshiny/src/www/data/country.geojson",
+    "project_path": "src/www/data/country.geojson",
+    "type": "text",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1651211641553.0,
+    "source_on_save": false,
+    "relative_order": 6,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "0,66622",
+        "scrollLine": "1"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1651211271,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1651211271,
+    "read_only": false,
+    "read_only_alternatives": []
+}

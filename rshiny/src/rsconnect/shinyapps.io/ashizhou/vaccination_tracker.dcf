@@ -1,0 +1,13 @@
+name: vaccination_tracker
+title: vaccination_tracker
+username:
+account: ashizhou
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6198148
+bundleId: 5849669
+url: https://ashizhou.shinyapps.io/vaccination_tracker/
+when: 1651211661.54998
+lastSyncTime: 1651211661.54999
+asMultiple: FALSE
+asStatic: FALSE

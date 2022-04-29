@@ -1,0 +1,13 @@
+library(shiny)
+library(shinythemes)
+library(ggplot2)
+library(tidyverse)
+library(readr)
+library(ggthemes)
+library(plotly)
+library(shinydashboard)
+library(dashboardthemes)
+library(bslib)
+library(showtext)
+
+font_add(family = "	TimesModern-Bold", regular = "www/font/TimesModernBold.woff2.ttf")

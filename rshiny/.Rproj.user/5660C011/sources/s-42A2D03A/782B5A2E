@@ -1,0 +1,27 @@
+{
+    "id": "782B5A2E",
+    "path": "~/Documents/GitHub/Learning-D3.js-4-Mapping/chapter-10/clean_data.Rmd",
+    "project_path": null,
+    "type": "r_markdown",
+    "hash": "844779653",
+    "contents": "",
+    "dirty": false,
+    "created": 1651210808640.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "67,116",
+        "scrollLine": "49",
+        "last_setup_crc32": "42A2D03Ae2b1efe2"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1651211256,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1651211270964,
+    "read_only": false,
+    "read_only_alternatives": []
+}

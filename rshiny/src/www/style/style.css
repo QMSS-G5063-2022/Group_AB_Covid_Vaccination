@@ -1,0 +1,25 @@
+.card {
+    font-family: 'Source Sans Pro', sans-serif;
+    transition: 0.3s;
+    background-color: rgba(47, 53, 63, 0.4);;
+    width: 300px;
+    height: 140px;
+    border-radius: 4px;
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  
+
+  .scene-tooltip {
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  body { 
+    margin: 0; 
+    padding:0;
+  }
+
