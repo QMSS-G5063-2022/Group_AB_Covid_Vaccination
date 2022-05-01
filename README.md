@@ -40,8 +40,6 @@ A **global vaccine tracker** analysis how countries are rolling out vaccination 
 - Worldwide-level: How fast are countries vaccinating? Which country administered most doses in the past 7 days? Which country administered most doses throughout the Covid-19 timeline?
 - Worldwide-level: How does vaccination doses relate to country variations in health care infrastructure, say, it is expected that countries with higher GDP per capita will have more people getting vaccinated (in per 100K people). We would also look at indicators like region and mortality rate. 
 - Country-level: How does Covid-19 affect each country? We can also ask more detailed questions such as infection rate, death rate, vaccines offered and vaccination phase.
-- Country-level: Does the public’s attitudes and experiences with Covid-19 vaccinations causes low uptake in some countries? For example, it is expected that spread of safety concerns of vaccine amongst Twitter users (e.g., #covidsideeffect) would increase public vaccine hesitancy. We determined three possible barriers: confidence (i.e., safety of the vaccine), complacency (i.e., the perceived need for the vaccine), and convenience (i.e., how accessible the vaccine is to people).  What would be specific barrier to vaccination in each country? 
-
 
 <!-- CONTRIBUTOR -->
 ## Contributor
