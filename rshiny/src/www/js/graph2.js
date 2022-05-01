@@ -3,7 +3,7 @@ var regions = { "SAS": "South Asia" , "ECS": "Europe and Central Asia", "MEA": "
 	h = 500,
 	margin = 40,
     startYear =1, 
-	endYear = 341,
+	endYear = 342,
 	startAge = 1,
 	endAge = 45000,
 	y = d3.scale.linear().domain([endAge, startAge]).range([0 + margin, h - margin]),
@@ -56,6 +56,7 @@ d3.text('./data/graph2_cleaned.csv', 'text/csv', function(text) {
                 
             }
         }
+        console.log(currData)
 
         // Actual line
         vis.append("svg:path")

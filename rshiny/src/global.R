@@ -11,3 +11,4 @@ library(bslib)
 library(showtext)
 
 font_add(family = "	TimesModern-Bold", regular = "www/font/TimesModernBold.woff2.ttf")
+font_add(family = "	Cardo", regular = "www/font/Cardo-Regular.ttf")
