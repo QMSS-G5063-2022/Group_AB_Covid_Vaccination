@@ -10,5 +10,9 @@ library(dashboardthemes)
 library(bslib)
 library(showtext)
 
+graph3_data <- read_csv('www/data/graph3.csv')
+graph4_data <- read_csv('www/data/graph4.csv')
+graph4_country <- read_csv('www/data/graph4_country.csv')
+
 font_add(family = "	TimesModern-Bold", regular = "www/font/TimesModernBold.woff2.ttf")
-font_add(family = "	Cardo", regular = "www/font/Cardo-Regular.ttf")
+font_add(family = "	Cardo-Regular", regular = "www/font/Cardo-Regular.ttf")

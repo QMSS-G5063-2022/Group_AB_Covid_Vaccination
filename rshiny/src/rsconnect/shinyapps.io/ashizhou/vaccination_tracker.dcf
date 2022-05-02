@@ -5,9 +5,9 @@ account: ashizhou
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6198148
-bundleId: 5856637
+bundleId: 5858929
 url: https://ashizhou.shinyapps.io/vaccination_tracker/
-when: 1651398926.62348
-lastSyncTime: 1651398926.62349
+when: 1651471426.17363
+lastSyncTime: 1651471426.17365
 asMultiple: FALSE
 asStatic: FALSE
