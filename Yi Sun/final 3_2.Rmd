@@ -1,0 +1,396 @@
+---
+title: "Vaccine Tracker"
+output: html_document
+date: '2022-04-25'
+---
+
+```{r setup, include=FALSE,message=FALSE,results='hide'}
+setwd("D:/Data/R/vaccinations")
+library(tidyverse)
+library(DT)
+library(dplyr)
+library(sf)
+library(tmap)
+library(leaflet)
+library(data.table)
+library(tmaptools)
+library(ggplot2)
+library(ggthemes)
+library(ggpubr)
+library(patchwork)
+library(scales)
+library(plotly)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# A. Global Vaccine Tracker
+
+## A1. A statistical world map
+
+For 2020-2021, we have statistics on vaccinations by country.
+
+Due to possible differences in vaccine policies between regions, the map shows the vaccination status of Hong Kong, Macau and Taiwan respectively. Therefore, data from these three regions were not merged into China. Other regions have similar situations.
+
+```{r}
+data("World")
+oridata <- fread("vaccinations.csv")
+wordunion <- oridata$iso_code[grepl("OWID_",oridata$iso_code)] %>% unique()
+countrydata <- oridata %>% filter(!(iso_code %in% wordunion),date < "2022-01-01")%>% 
+  group_by(location,iso_code) %>% summarise(
+    people_vaccinated_num = max(people_vaccinated,na.rm=T),
+    people_fully_vaccinated_num = max(people_fully_vaccinated,na.rm=T)
+  )
+temp <- geocode_OSM(unique(countrydata$location))
+temp <- temp[,1:3]
+colnames(temp)[1] <- "location"
+country <- inner_join(countrydata,temp,by="location")
+anno <- paste("country:",country$location,",","iso code:",country$iso_code,",","people vaccinated:",country$people_vaccinated_num,",","people fully vaccinated:",country$people_fully_vaccinated_num,sep = "")
+country$anno <- anno
+leaflet(World,options = leafletOptions(minZoom = 1.2)) %>% addTiles() %>% addCircleMarkers(
+    data = country,
+    lng = ~lon, lat = ~lat,
+   label = ~anno,
+   color = c("blue"),
+   weight = country$people_fully_vaccinated_num/10^9,
+   labelOptions = labelOptions(noHide = F, direction = "bottom", 
+      style = list( 
+        "color" = "black", 
+        "font-family" = "serif", 
+       "font-style" = "bold", 
+       "box-shadow" = "3px 3px #FF9966", 
+        "font-size" = "12px"
+      ))
+    )
+
+```
+
+
+Displays information for these locations:
+
+```{r}
+country_show <- country %>% select(-7) %>% arrange(desc(people_fully_vaccinated_num))
+datatable(country_show,options = list(pageLength=6),colnames = c("Location","ISO","Vaccinated","Fully vaccinated","Latitude","Longitude"),rownames = F,caption = "Table 1: People vaccinated data for each location")
+
+
+```
+
+## A2. Vaccination rates for each location
+
+For statistical calculations, We set the time period from January 2021 to March 2022.
+Considering the large population base of populous countries, we define rate as the difference in vaccination rates per 100 people in a region over a period of time.
+
+*P100 = people_vaccinated_per_hundred*
+$$VR = EndP100 - StartP100$$
+
+```{r,message=FALSE}
+vacrate <- oridata  %>% filter(!(iso_code %in% wordunion)) %>%
+  select(location,iso_code,date,people_vaccinated,people_vaccinated_per_hundred)
+
+newdata <- c()
+for (i in unique(vacrate$iso_code)) {
+  data = vacrate %>% filter(iso_code==i)
+  data$year  = year(data$date)
+  data$month = month(data$date)
+  data$people_vaccinated[is.na(data$people_vaccinated)] = 0
+  data$people_vaccinated_per_hundred[is.na(data$people_vaccinated_per_hundred)] = 0
+  tempdat = data %>% filter(date < "2022-04-01"&date >= "2021-01-01") %>% 
+    group_by(location,iso_code,year,month) %>% 
+    summarise(vaccinate_num = max(as.numeric(people_vaccinated)),per100 = max(as.numeric(people_vaccinated_per_hundred))) %>% filter(vaccinate_num!=0) %>%
+    group_by(year) %>% mutate(year_vr = round(max(per100)-min(per100),2))
+  newdata = rbind(newdata,tempdat)
+}
+```
+
+```{r}
+yearvr_dat2021 <- newdata %>% filter(year==2021)%>% select(year,location,iso_code,year_vr)%>% distinct() %>% arrange(desc(year_vr))
+yearvr_dat2022 <- newdata %>% filter(year==2022)%>% select(year,location,iso_code,year_vr)%>% distinct() %>% arrange(desc(year_vr))
+
+datatable(yearvr_dat2021,options = list(pageLength=6),colnames = c("Year","Location","ISO","Year VR"),rownames = F,caption = "Table 2: 2021 year VR for each location")
+datatable(yearvr_dat2022,options = list(pageLength=6),colnames = c("Year","Location","ISO","Year VR"),rownames = F,caption = "Table 3: 2022 year VR for each location")
+
+```
+
+For the top three in 2021 and 2022, we look at specific vaccinations.
+
+```{r}
+newdata <- newdata %>% mutate(date = paste(year,month,sep="_"))
+index <- c(paste(2021,1:12,sep = "_"),paste(2022,1:3,sep = "_"))
+newdata$date <- factor(newdata$date,levels = index)
+top3_2021 <- newdata %>% filter(iso_code%in%c("ARE","CHL","PRT"),year==2021)
+top3_2022 <- newdata %>% filter(iso_code%in%c("BGD","NPL","WSM"),year==2022)
+```
+
+
+```{r}
+ggplot(top3_2021,aes(x=date,y = per100,group=iso_code,color=iso_code,linetype=iso_code))+
+  geom_line(size=0.8)+
+  geom_point(size=2)+
+  scale_linetype_manual(values = c(1,2,3))+
+  theme_clean()+
+  labs(x="",y="People vaccinated per hundred",title = "Figure1: Top three locations with vaccination rate in 2021")+
+  theme(axis.text.x = element_text(size = 11,angle = 45,hjust = 1),
+        axis.text.y = element_text(size = 11),
+        axis.title.y = element_text(size = 14))+
+  scale_color_wsj()
+ 
+ggplot(top3_2022,aes(x=date,y = per100,group=iso_code,color=iso_code,linetype=iso_code))+
+  geom_line(size=0.8)+
+  geom_point(size=2)+
+  scale_linetype_manual(values = c(1,2,3))+
+  scale_y_continuous(limits = c(50,100))+
+  theme_clean()+
+  labs(x="",y="People vaccinated per hundred",title = "Figure2: Top three locations with vaccination rate in 2022")+
+  theme(axis.text.x = element_text(size = 11,angle = 45,hjust = 1),
+        axis.text.y = element_text(size = 11),
+        axis.title.y = element_text(size = 14))+
+  scale_color_wsj()
+ 
+
+```
+
+## A3. Differences in vaccine consumption by region
+
+Intuitively, we think that countries with large population bases will consume more vaccines. Is it really so? We did a statistical analysis of vaccine consumption in each country.
+
+```{r}
+consumedata <- oridata %>% select(location,iso_code,date,total_vaccinations,total_vaccinations_per_hundred,people_fully_vaccinated,total_boosters,total_boosters_per_hundred) %>% filter(!(iso_code %in% wordunion))
+consumedata[is.na(consumedata)] <- 0
+
+```
+
+First we look at vaccine use by country over the past week. Time from April 18, 2022 to April 24, 2022. Here, we label countries for which no dose data has been collected over the past week as -999.
+
+```{r}
+DoseCompute <- function(data){
+  data = filter(data,total_vaccinations!=0)
+  temp1 = data %>% filter(date>="2022-04-18")
+  if(nrow(temp1)==0){
+    dosenum = -999
+  }else{
+    
+    temp2 = data %>% filter(date<"2022-04-18"&date>="2022-01-01")
+    if(length(temp1$total_vaccinations)>1){
+      dosenum = max(as.numeric(temp1$total_vaccinations)) - min(as.numeric(temp1$total_vaccinations))
+    }else{
+      maxnum = as.numeric(temp1$total_vaccinations) %>% max()
+      minnum = as.numeric(temp2$total_vaccinations) %>% max()
+      dosenum = maxnum - minnum
+    }
+  }
+  return(dosenum)
+}
+
+coslastweek <- data.frame()
+counts = 1
+for (j in unique(consumedata$iso_code)) {
+  dat = consumedata %>% filter(iso_code==j) %>% select(1:4)
+  coslastweek[counts,1] = j
+  coslastweek[counts,2] = DoseCompute(dat)
+  counts = counts + 1
+}
+colnames(coslastweek) <- c("iso_code","dose_num_weekly")
+coslastweek <- coslastweek %>% arrange(desc(dose_num_weekly))
+datatable(coslastweek,options = list(pageLength=5),colnames = c("Location","Dose"),rownames = F,caption = "Table 4: Vaccine doses used in excess of one week")
+
+
+```
+
+Shows the vaccine consumption of the top 10 countries in the past week.
+
+```{r}
+
+plotdat <- coslastweek %>% filter(dose_num_weekly>0) %>% head(6)
+ggplot(plotdat,aes(x=reorder(iso_code,- dose_num_weekly),y=dose_num_weekly/10^6,fill=iso_code))+
+  geom_col()+
+  labs(x="",y="Dose number of last week(10^6)",title = "Figure3: Top 6 locations with using dose on last week")+
+  theme_par()+
+  theme(axis.text.x = element_text(size = 11,angle = 45,hjust = 1),
+        axis.text.y = element_text(size = 11),
+        axis.title.y = element_text(size = 14))+
+  guides(fill="none")+
+  scale_fill_wsj()
+  
+  
+  
+```
+
+
+We notice that the top three are China, India and Indonesia. So are the populations in the three countries also among the top three in the world? We found the top ten most populous countries in the world in 2022 through http://www.geoba.se/index.php.
+
+```{r}
+population <- read.table("population.txt",header = T,sep = "\t")
+cosshow <- inner_join(distinct(consumedata[,1:2]),coslastweek,by="iso_code")
+cosshow <- right_join(cosshow,population,by="location")
+cosshow <- arrange(cosshow,desc(Population))
+datatable(cosshow ,options = list(pageLength=5),colnames = c("Location","ISO","Dose","Population","Year"),rownames = F,caption = "Table 5: Vaccine doses and population data for each location")
+
+```
+
+```{r,fig.width=8}
+
+plotdat1 <- cosshow %>%  head(6) %>% arrange(desc(dose_num_weekly))
+plotdat1$iso_code <- factor(plotdat1$iso_code,levels = c("CHN","IND","IDN","BRA","USA","PAK"))
+ggplot()+
+  geom_col(data=plotdat1,aes(x=iso_code,y=dose_num_weekly/10^6,fill=iso_code))+
+  geom_line(data=plotdat1,aes(x=iso_code,y=rescale(Population/10^6,c(0,15)),group=1),size=1)+
+  geom_point(data=plotdat1,aes(x=iso_code,y=rescale(Population/10^6,c(0,15))),size=2,fill="white",shape=21)+
+  scale_y_continuous(breaks = pretty_breaks(5),sec.axis =sec_axis(~rescale(.,c(200,1400)),name="Population(10^6)"))+
+  labs(x="",y="Dose number of last week(10^6)",title = "Figure4: Top 6 locations with using dose and population")+
+  theme_par()+
+  theme(axis.text.x = element_text(size = 11,angle = 45,hjust = 1),
+        axis.text.y = element_text(size = 11),
+        axis.title.y = element_text(size = 14))+
+  guides(fill="none")+
+  scale_fill_wsj()
+```
+
+The bar chart reflects the vaccine dosage, and the line chart reflects the population. We can observe that the third place has changed from Indonesia to the United States. We speculate that this may be related to the different anti-COVID-19 policies of various countries.
+
+What is the proportion of the top three countries in the types of new crown vaccine vaccinations in the past week?
+
+Due to the existence of missing data, we selected the same time(2022-04-18) for comparison of the use of vaccine injections in the past one week in these three countries.
+
+```{r}
+top3vacdose <- consumedata %>% filter(iso_code%in%c("CHN","IND","IDN"),date=="2022-04-18")
+top3vacdose$total_vaccinations <- as.numeric(top3vacdose$total_vaccinations)
+top3vacdose$total_boosters <- as.numeric(top3vacdose$total_boosters)
+top3vacdose$people_fully_vaccinated <- as.numeric(top3vacdose$people_fully_vaccinated)
+top3vacdose <- top3vacdose %>% mutate(one_dose=total_vaccinations - 2*people_fully_vaccinated - total_boosters) %>% select(1:2,9,6:7,4)
+colnames(top3vacdose) <- c("Country","iso","one_dose","two_dose","three_dose","total")
+a <- top3vacdose[,-6]
+typedose <- melt(a,id.vars = c("Country","iso"),variable.name = "dose_type",value.name = "value")
+typedose$total <- as.numeric(rep(top3vacdose$total,times=3))
+typedose$percentage <- round(typedose$value/typedose$total,2)
+typedose$labs <- paste(typedose$dose_type,"(",typedose$percentage*100,"%)",sep = "")
+
+pCHN <- typedose %>% filter(iso=="CHN")
+p1 <- ggpie(pCHN,"percentage",fill = "dose_type",
+            palette = "aaas",label = pCHN$labs,lab.pos = "in",lab.font = c(3, 'white'))+
+  guides(fill="none")+labs(title="China")+theme(plot.title = element_text(hjust = 0.5))
+pIND <- typedose %>% filter(iso=="IND")
+p2 <- ggpie(pIND ,"percentage",fill = "dose_type",
+            palette = "aaas",label = pIND$labs,lab.pos = "in",lab.font = c(3, 'white'))+
+  guides(fill="none")+labs(title="India")+theme(plot.title = element_text(hjust = 0.5))
+pIDN <- typedose %>% filter(iso=="IDN")
+p3 <- ggpie(pIDN,"percentage",fill = "dose_type",
+            palette = "aaas",label = pIDN$labs,lab.pos = "in",lab.font = c(3, 'white'))+
+  guides(fill="none")+labs(title="Indonesia")+theme(plot.title = element_text(hjust = 0.5))
+p4 <- p1 + p2 + p3 
+p4 + plot_annotation(title = "Figure5: The proportion of vaccine types")
+
+```
+
+We can observe that China has a level far higher than the other two countries in terms of the inoculation amount of the booster needle (third needle).
+
+Not limited to the past week, what is the situation of vaccine consumption in various countries throughout the timeline?
+
+Next, we will count the vaccination status of each country by year.
+
+```{r}
+dat3 <- consumedata[,1:4] %>% filter(total_vaccinations!=0) %>%  group_by(location,iso_code) %>% mutate(diff = max(as.numeric(total_vaccinations)) - min(as.numeric(total_vaccinations))) %>% select(1,2,5) %>% distinct() %>% arrange(desc(diff))
+
+datatable(dat3,options = list(pageLength=5),colnames = c("Location","ISO","Dose difference"),rownames = F,caption = "Table 6: Differences in vaccine dose consumption across countries over time")
+```
+
+Show the top 6 countries using a bar chart.
+
+```{r,fig.width=8}
+plotdat1 <- dat3 %>% head(6)
+ggplot(plotdat1,aes(x=reorder(iso_code,- diff),y=diff/10^6,fill=iso_code))+
+  geom_col()+
+  labs(x="",y="Dose difference over time(10^6)",title = "Figure6: Top 6 countries with dose differences across the timeline")+
+  theme_par()+
+  theme(axis.text.x = element_text(size = 11,angle = 45,hjust = 1),
+        axis.text.y = element_text(size = 11),
+        axis.title.y = element_text(size = 14))+
+  guides(fill="none")+
+  scale_fill_wsj()
+```
+
+Statistics on the rate of vaccine dose consumption in top 3 population countries(CHN, IND and USA) over the past 7 days or on an integrated timeline.
+
+```{r,fig.width=8}
+top3speed <- oridata %>% filter(!(iso_code %in% wordunion), iso_code%in%c("CHN","IND","IDN","BRA","USA","PAK")) %>% 
+  select(1,3,14) %>% na.omit() %>% 
+  pivot_wider(names_from = location,
+              values_from = daily_vaccinations_per_million) %>% na.omit()
+colnames(top3speed)[7] <- "USA"
+
+temp7day <- top3speed %>% filter(date<="2022-04-23",date>="2022-04-17")
+plot_ly(temp7day,x=~date,y=~China, name = "China",type = "scatter", mode="lines") %>% 
+  add_trace(y=~Brazil,name = "Brazil",mode="lines") %>% 
+  add_trace(y=~USA,name="USA",mode="lines") %>% 
+  add_trace(y=~India,name = "India",mode="lines") %>% 
+  add_trace(y=~Indonesia,name = "Indonesia",mode="lines") %>% 
+  add_trace(y=~Pakistan,name = "Pakistan",mode="lines") %>% 
+  layout(title="Figure7: Daily vaccinations per million on the past 7 days",
+         xaxis = list(title=""),
+         yaxis = list(title="Doses Administered")
+         )
+
+plot_ly(top3speed,x=~date,y=~China, name = "China",type = "scatter", mode="lines") %>% 
+  add_trace(y=~Brazil,name = "Brazil",mode="lines") %>% 
+  add_trace(y=~USA,name="USA",mode="lines") %>% 
+  add_trace(y=~India,name = "India",mode="lines") %>% 
+  add_trace(y=~Indonesia,name = "Indonesia",mode="lines") %>% 
+  add_trace(y=~Pakistan,name = "Pakistan",mode="lines") %>% 
+  layout(title="Figure8: Daily vaccinations per million on an integrated timeline",
+         xaxis = list(title=""),
+         yaxis = list(title="Doses Administered")
+         )
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
