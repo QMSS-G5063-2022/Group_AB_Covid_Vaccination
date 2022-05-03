@@ -1,12 +1,12 @@
 var regions = { "SAS": "South Asia" , "ECS": "Europe and Central Asia", "MEA": "Middle East & North Africa", "SSF": "Sub-Saharan Africa", "LCN": "Latin America & Caribbean", "EAS": "East Asia &amp; Pacific", "NAC": "North America" },
 	w = 925,
 	h = 500,
-	margin = 40,
+	margin = 45,
     startYear =1, 
 	endYear = 342,
 	startAge = 1,
 	endAge = 45000,
-	y = d3.scale.linear().domain([endAge, startAge]).range([0 + margin, h - margin]),
+	y = d3.scale.linear().domain([endAge, startAge]).range([0 + margin, h-margin]),
 	x = d3.scale.linear().domain([1, 341]).range([0 + margin -5, w]),
 	years = d3.range(startYear, endYear);
 
@@ -56,8 +56,6 @@ d3.text('./data/graph2_cleaned.csv', 'text/csv', function(text) {
                 
             }
         }
-        console.log(currData)
-
         // Actual line
         vis.append("svg:path")
             .data([currData])
@@ -90,7 +88,7 @@ vis.selectAll(".xLabel")
     .attr("class", "xLabel")
     .text(function(String) { return Math.abs(String - 350) + ' days ago'; })
     .attr("x", function(d) { return x(d) })
-    .attr("y", h-5)
+    .attr("y", h-15)
     .attr("text-anchor", "middle")
 
 vis.selectAll(".yLabel")
@@ -121,6 +119,8 @@ vis.selectAll(".yTicks")
     .attr("y2", function(d) { return y(d); })
     .attr("x2", x(startYear))
 
+
+
 function onclick(d, i) {
     var currClass = d3.select(this).attr("class");
     if (d3.select(this).classed('selected')) {
@@ -139,7 +139,7 @@ function onmouseover(d, i) {
     var countryVals = startEnd[countryCode];
     
     var blurb = '<h2>' + countryCodes[countryCode] + '</h2>';
-    blurb += "<p>Current speed: " + Math.round(countryVals['endVal']) + " doses / 100K. ";
+    blurb += "<p>Current speed: " + Math.round(countryVals['endVal']) + " doses of vaccine per 100,000 people. ";
     blurb += "</p>";
     
     $("#default-blurb").hide();

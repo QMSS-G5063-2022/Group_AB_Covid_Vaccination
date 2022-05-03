@@ -9,6 +9,8 @@ library(shinydashboard)
 library(dashboardthemes)
 library(bslib)
 library(showtext)
+library(fresh)
+library(shinyWidgets)
 
 graph3_data <- read_csv('www/data/graph3.csv')
 graph4_data <- read_csv('www/data/graph4.csv')

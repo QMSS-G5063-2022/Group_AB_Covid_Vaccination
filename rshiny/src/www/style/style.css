@@ -10,7 +10,12 @@
     padding: 0;
     text-align: center;
   }
-  
+  .h3{
+    text-align: center;
+    color: white;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size:1.5rem;
+  }
 
   .scene-tooltip {
     z-index: 2;
@@ -21,5 +26,9 @@
   body { 
     margin: 0; 
     padding:0;
+  }
+
+  .icons svg {
+    color: white;
   }
 

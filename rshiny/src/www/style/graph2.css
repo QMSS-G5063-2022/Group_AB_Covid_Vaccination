@@ -16,7 +16,7 @@ h2 {
     font-size: 1.5em;
     text-transform: uppercase;
 }
-p { line-height: 1.4em; margin-bottom: 1.0em; }
+p { line-height: 1.4em; margin-bottom: 1.0em;}
 a { color: #821122; }
 #content {
     width: 925px;
@@ -53,6 +53,7 @@ a { color: #821122; }
     height: 60px;
     border-top: 1px solid #e2e2e2;
     padding-top: 20px;
+    margin-bottom: 30px;
 }
 
 path {
