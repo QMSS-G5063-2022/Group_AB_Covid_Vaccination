@@ -10,7 +10,7 @@ server<-function(input, output, session) {
             height = 560, 
             color = ~Income, 
             colors = 'Paired',
-            sizes = c(min(graph3_data$size)+2, max(graph3_data$size)-2),
+            sizes = c(min(graph3_data$size)+2, max(graph3_data$size-5)),
             marker = list(opacity = 0.5, sizemode = 'diameter'),
             hoverinfo = 'text',
             text = ~paste('Country:', country, '<br>Population (M):', pop,'<br>First dose percentage:', per)) %>% 
