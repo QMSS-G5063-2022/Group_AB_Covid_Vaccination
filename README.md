@@ -41,6 +41,14 @@ A **global vaccine tracker** analysis how countries are rolling out vaccination 
 - Worldwide-level: How does vaccination doses relate to country variations in health care infrastructure, say, it is expected that countries with higher GDP per capita will have more people getting vaccinated (in per 100K people). We would also look at indicators like region and mortality rate. 
 - Country-level: How does Covid-19 affect each country? We can also ask more detailed questions such as infection rate, death rate, vaccines offered and vaccination phase.
 
+[Project link](https://ashizhou.shinyapps.io/vaccination_tracker/)
+
+[Project Proposal](./Final_Project_Proposal_Group_AB_Covid_Vaccination.pdf.pdf)
+
+[Process Book](./Process_Book_Group_AB.pdf)
+
+[Project Group Presentation Video](https://drive.google.com/file/d/1UJTbEJQBgnzkw4zgZgKDIse_qgbpDcvN/view?usp=sharing)
+
 <!-- CONTRIBUTOR -->
 ## Contributor
 
